@@ -1,0 +1,30 @@
+version: "3"
+services:
+  pgbouncer:
+    image: brainsam/pgbouncer:latest
+    restart: always
+    environment:
+      DB_HOST: "postgres11"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "prisma"
+      POOL_MODE: "transaction"
+      MAX_CLIENT_CONN: "1000"
+    networks:
+      - databases
+    ports:
+      - "6432:6432"
+
+  postgres11:
+    image: postgres:11
+    restart: always
+    command: postgres -c 'max_connections=1000'
+    environment:
+      POSTGRES_PASSWORD: "prisma"
+    ports:
+      - "5433:5432"
+    networks:
+      - databases
+
+networks:
+  databases: null
